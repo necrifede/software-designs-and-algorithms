@@ -25,3 +25,10 @@ USE_SSH=true GIT_USER=necrifede yarn deploy
 ```
 
 Once command is executed after some time documentation should be updated on [https://necrifede.github.io/software-designs-and-algorithms/](https://necrifede.github.io/software-designs-and-algorithms/). This action could take until 20 minutes accorind github pages documentation
+
+## versions
+
+versions used to work on hometasks:
+
+- *node:* v18.2.0
+- *npm:* 8.9.0
