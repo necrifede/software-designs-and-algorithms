@@ -15,3 +15,13 @@ $ npm run serve
 ```
 
 That is it, enjoy the course by navigating to the [http://localhost:3000](http://localhost:3000) in your preferred browser.
+
+## Deploy docusaurus documentation
+
+To update docusaurus documentation execute below command from `master` branch.
+
+```sh
+USE_SSH=true GIT_USER=necrifede yarn deploy
+```
+
+Once command is executed after some time documentation should be updated on [https://necrifede.github.io/software-designs-and-algorithms/](https://necrifede.github.io/software-designs-and-algorithms/). This action could take until 20 minutes accorind github pages documentation
