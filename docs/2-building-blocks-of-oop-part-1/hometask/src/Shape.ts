@@ -23,5 +23,7 @@ export abstract class Shape {
             .map((point) => point.toString())
             .join(", ")}.`;
 
-    getPerimeter = () => this.points.reduce((acc, point, idx, arr) => acc + point.distance(arr[idx + 1] ?? arr[0]), 0);
+    getDistances = () => this.points.map((point, idx, arr) => point.distance(arr[idx + 1] ?? arr[0]));
+
+    getPerimeter = () => this.getDistances().reduce((total, d) => total + d, 0);
 }

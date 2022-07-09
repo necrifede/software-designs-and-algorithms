@@ -1,3 +1,7 @@
+const sqrt = Math.sqrt;
+const round = Math.round;
+const pow = Math.pow;
+
 export class Point {
     x: number;
     y: number;
@@ -16,7 +20,7 @@ export class Point {
     distance(x: Point | number = 0, y: number = 0): number {
         // TODO: ask why instead "number" cannot be "Point"
         if (typeof x === "number") {
-            return Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2));
+            return sqrt(round(pow(this.x - x, 2)) + round(pow(this.y - y, 2)));
         } else {
             const point = x;
             return this.distance(point?.x, point?.y);
