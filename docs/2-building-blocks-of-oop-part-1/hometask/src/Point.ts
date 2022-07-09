@@ -14,6 +14,7 @@ export class Point {
     distance(other: Point): number;
     distance(x: number, y: number): number;
     distance(x: Point | number = 0, y: number = 0): number {
+        // TODO: ask why instead "number" cannot be "Point"
         if (typeof x === "number") {
             return Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2));
         } else {
