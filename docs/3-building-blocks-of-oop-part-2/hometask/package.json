@@ -1,0 +1,22 @@
+{
+    "name": "oop_and_ood_part2",
+    "version": "0.0.1",
+    "description": "",
+    "private": true,
+    "main": "usage.js",
+    "scripts": {
+        "build": "tsc src/usage.ts",
+        "start": "node src/usage.js",
+        "test": "echo \"Test the test script: no test specified\""
+    },
+    "author": "Nestor Felipe",
+    "license": "ISC",
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5"
+    },
+    "dependencies": {
+        "typescript": "^4.5.5"
+    },
+    "homepage": "https://necrifede.github.io/software-designs-and-algorithms/docs/building-blocks-of-oop-part-2/hometask/"
+}
