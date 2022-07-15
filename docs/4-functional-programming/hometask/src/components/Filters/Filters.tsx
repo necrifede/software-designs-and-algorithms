@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import Checkbox from '@mui/material/Checkbox';
-
-import styles from './Filters.module.scss';
+import { useState, useEffect } from "react";
+import Checkbox from "@mui/material/Checkbox";
+import { always, anyPass, isEmpty, pluck } from "ramda";
+import styles from "./Filters.module.scss";
 
 interface FiltersProps {
-  store?: {};
-  updateStore?: (val) => void;
+    // store?: {};
+    setFilter?: (val) => void;
 }
 
 // OR
@@ -18,53 +18,52 @@ interface FiltersProps {
 // OR store can be global
 
 const OPTIONS = [
-  {
-    title: 'Without posts',
-  },
-  {
-    title: 'More than 100 posts',
-  },
+    {
+        title: "Without posts",
+        filterFunc: ({ posts }) => posts <= 0,
+    },
+    {
+        title: "More than 100 posts",
+        filterFunc: ({ posts }) => posts >= 100,
+    },
 ];
 
-export function Filters(props: FiltersProps) {
-  const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
+export function Filters({ setFilter }: FiltersProps) {
+    const [selectedFilter, setSelectedFilter] = useState<{ title: string; filterFunc: (any) => any }[]>([]);
 
-  const onChange = ({ title }) => {
-    console.log(title); // for debugging
+    const onChange = ({ title, filterFunc }) => {
+        // console.log(title); // for debugging
 
-    let updatedFilters;
-    if (selectedFilter.find((filter) => filter === title)) {
-      updatedFilters = selectedFilter.filter(
-        (filter) => filter !== title
-      );
-    } else {
-      updatedFilters = [...selectedFilter, title];
-    }
+        let updatedFilters;
+        if (selectedFilter.find(({ title: titleLocal }) => titleLocal === title)) {
+            updatedFilters = selectedFilter.filter(({ title: titleLocal }) => titleLocal !== title);
+        } else {
+            updatedFilters = [...selectedFilter, { title, filterFunc }];
+        }
+        setSelectedFilter(updatedFilters);
+    };
 
-    setSelectedFilter(updatedFilters);
-  };
+    useEffect(() => {
+        setFilter(always(isEmpty(selectedFilter) ? always(true) : anyPass(pluck("filterFunc", selectedFilter))));
+    }, [setFilter, selectedFilter]);
 
-  return (
-    <div className={styles.group}>
-      <div className={styles.title}>Filter by posts</div>
-      <ul className={styles.list}>
-        {OPTIONS.map((option) => (
-          <li
-            value={option.title}
-            onClick={() => onChange(option)}
-            key={option.title}
-          >
-            <Checkbox
-              checked={!!selectedFilter.find(filter => filter === option.title)}
-              value={option.title}
-              onChange={() => onChange(option)}
-              size="small"
-              color="primary"
-            />{' '}
-            {option.title}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+    return (
+        <div className={styles.group}>
+            <div className={styles.title}>Filter by posts</div>
+            <ul className={styles.list}>
+                {OPTIONS.map((option) => (
+                    <li value={option.title} onClick={() => onChange(option)} key={option.title}>
+                        <Checkbox
+                            checked={!!selectedFilter.find(({ title }) => title === option.title)}
+                            value={option.title}
+                            // onChange={() => onChange(option)}
+                            size="small"
+                            color="primary"
+                        />{" "}
+                        {option.title}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 }
