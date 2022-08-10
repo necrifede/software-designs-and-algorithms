@@ -156,5 +156,63 @@ describe('Step 2: Multiple shippers', () => {
     });
 });
 
+describe('step 3: Different Kinds of Shipments', () => {
+    let baseState: State = {
+        shipmentID: 111,
+        weight: 2,
+        fromAddress: 'street, city, state',
+        fromZipCode: 'ABCDE',
+        toAddress: 'street2, city2, state2',
+        toZipCode: 'VWXYZ',
+    };
+    const client = new Client();
+
+    beforeEach(() => {
+        baseState = { ...baseState };
+    });
+
+    test('should return correct value for package on default Shipper', () => {
+        const state = { ...baseState, fromZipCode: '012AB', weight: 160 };
+
+        client.requestShipment(state);
+        expect(client.requestPrice()).toBe(160 * 0.25);
+    });
+
+    test('should return correct value for oversize on default Shipper', () => {
+        const state = { ...baseState, fromZipCode: '012AB', weight: 161 };
+
+        client.requestShipment(state);
+        expect(client.requestPrice()).toBe(161 * 0.25 + 10);
+    });
+
+    test('should return correct value for package for Chicago Sprint', () => {
+        const state = { ...baseState, fromZipCode: '456AB', weight: 160 };
+
+        client.requestShipment(state);
+        expect(client.requestPrice()).toBe(160 * 0.2);
+    });
+
+    test('should return correct value for oversize for Chicago Sprint', () => {
+        const state = { ...baseState, fromZipCode: '456AB', weight: 161 };
+
+        client.requestShipment(state);
+        expect(client.requestPrice()).toBe(161 * 0.2);
+    });
+
+    test('should return correct value for package for Pacific Parcel', () => {
+        const state = { ...baseState, fromZipCode: '999AB', weight: 160 };
+
+        client.requestShipment(state);
+        expect(client.requestPrice()).toBe(160 * 0.19);
+    });
+
+    test('should return correct value for oversize for Pacific Parcel', () => {
+        const state = { ...baseState, fromZipCode: '999AB', weight: 161 };
+
+        client.requestShipment(state);
+        expect(client.requestPrice()).toBe(161 * 0.19 + 161 * 0.02);
+    });
+});
+
 // to make the isolatedModules config works
 export {};

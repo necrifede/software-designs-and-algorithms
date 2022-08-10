@@ -1,3 +1,3 @@
 export interface IShipper {
-    getCost(weight: number): number;
+    getCost(weight: number, shipment: string): number;
 }

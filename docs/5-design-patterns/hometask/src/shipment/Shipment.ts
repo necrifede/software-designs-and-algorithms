@@ -1,6 +1,6 @@
-import { State } from './types';
-import { getSequencialNumber, validateZipCode } from './utils';
-import { AirEastShipper, ChicagoSprintShipper, IShipper, PacificParcelShipper } from './shippers';
+import { State } from '../types';
+import { getSequencialNumber, validateZipCode } from '../utils';
+import { AirEastShipper, ChicagoSprintShipper, IShipper, PacificParcelShipper } from '../shippers';
 
 const airEastShipper = new AirEastShipper();
 const chicagoSprintShipper = new ChicagoSprintShipper();
@@ -21,7 +21,7 @@ const getShipper = (code = 1) => shipperOptions?.[code - 1] || airEastShipper;
 
 const getFirstCharAsInt = (word: string) => (isNaN(Number(word?.[0])) ? undefined : Number(word?.[0]));
 
-export class Shipment {
+export abstract class Shipment {
     shipmentID: number; // if 0 (zero) generate a new one
     toAddress: string; // has street, city, and state
     fromAddress: string; // has street, city, and state
@@ -39,10 +39,17 @@ export class Shipment {
         this.fromZipCode = validateZipCode(fromZipCode);
         this.weight = weight;
         this.shipper = getShipper(getFirstCharAsInt(fromZipCode));
-        this.price = this.shipper.getCost(this.weight);
+        this.price = -1;
     }
 
-    getPrice = () => this.price;
+    getPrice: () => number = () => {
+        if (this.price < 0) {
+            this.calculatePrice();
+        }
+        return this.price;
+    };
+
+    abstract calculatePrice: () => void;
 
     getInstance = () => this;
 
