@@ -3,6 +3,8 @@ node_modules
 
 # Production
 build
+**/dist
+**/garbage
 
 # Generated files
 .docusaurus

@@ -1,0 +1,20 @@
+{
+    "name": "design-patterns",
+    "version": "0.0.1",
+    "description": "Fourth home task",
+    "private": true,
+    "main": "index.js",
+    "scripts": {
+        "build": "tsc -p tsconfig.build.json",
+        "test": "jest"
+    },
+    "author": "Nestor Felipe",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/jest": "^28.1.6",
+        "jest": "^28.1.3",
+        "ts-jest": "^28.0.7",
+        "ts-node": "^10.9.1",
+        "typescript": "^4.7.4"
+    }
+}
