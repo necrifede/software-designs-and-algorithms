@@ -214,5 +214,38 @@ describe('step 3: Different Kinds of Shipments', () => {
     });
 });
 
+describe('step 4: Marking Shipments with Special Codes', () => {
+    let baseState: State = {
+        shipmentID: 111,
+        weight: 2,
+        fromAddress: 'street, city, state',
+        fromZipCode: 'ABCDE',
+        toAddress: 'street2, city2, state2',
+        toZipCode: 'VWXYZ',
+    };
+    const client = new Client();
+
+    beforeEach(() => {
+        baseState = { ...baseState };
+    });
+
+    test('should shipment marked as fragile', () => {
+        const marks = { fragile: true };
+
+        const result = client.requestShipment(baseState, marks);
+        expect(result).toContain('**MARK FRAGILE**');
+        expect(result).not.toContain('**MARK RETURN RECEIPT REQUESTED**');
+        expect(result).not.toContain('**MARK DO NOT LEAVE IF ADDRESS NOT AT HOME**');
+    });
+    test('should shipment marked twice: return receipt requested and do not leave home alone', () => {
+        const marks = { fragile: false, return: true, noHomeAlone: true };
+        
+        const result = client.requestShipment(baseState, marks);
+        expect(result).not.toContain('**MARK FRAGILE**');
+        expect(result).toContain('**MARK RETURN RECEIPT REQUESTED**');
+        expect(result).toContain('**MARK DO NOT LEAVE IF ADDRESS NOT AT HOME**');
+    });
+});
+
 // to make the isolatedModules config works
 export {};

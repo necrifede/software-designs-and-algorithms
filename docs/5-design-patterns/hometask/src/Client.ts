@@ -1,11 +1,17 @@
-import { Letter, Oversize, Package, Shipment } from './shipment';
-import { State } from './types';
+import { FragileDecorate, Letter, NoHomeAloneDecorate, Oversize, Package, ReturnDecorate, IShipment } from './shipment';
+import { Marks, State } from './types';
+
+const markObjects = {
+    fragile: FragileDecorate,
+    return: ReturnDecorate,
+    noHomeAlone: NoHomeAloneDecorate,
+};
 
 /**
  * This will interact with the GUI
  */
 export class Client {
-    shipment: Shipment | undefined;
+    shipment: IShipment | undefined;
 
     createShipment = (state: State) => {
         if (state.weight <= 15) {
@@ -17,9 +23,13 @@ export class Client {
         return new Oversize(state);
     };
 
-    requestShipment = (state: State) => {
-        this.shipment = this.createShipment(state);
-        this.shipment.calculatePrice();
+    requestShipment = (state: State, marks: Marks = {}) => {
+        this.shipment = Object.entries(marks).reduce(
+            (shipment: IShipment, [mark, isPresent]) =>
+                isPresent ? new markObjects[mark as keyof Marks](shipment) : shipment,
+            this.createShipment(state)
+        );
+        this.shipment.getPrice();
         const result = this.shipment.ship();
         // console.log('result: ', result);
         return result;

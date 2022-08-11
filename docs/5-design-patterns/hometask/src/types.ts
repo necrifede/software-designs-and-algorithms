@@ -1,3 +1,9 @@
+export type Marks = {
+    fragile?: boolean;
+    return?: boolean;
+    noHomeAlone?: boolean;
+};
+
 export type State = {
     shipmentID: number; // if 0 (zero) generate a new one
     weight: number; // in ounces

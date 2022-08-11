@@ -1,6 +1,7 @@
 import { State } from '../types';
 import { getSequencialNumber, validateZipCode } from '../utils';
 import { AirEastShipper, ChicagoSprintShipper, IShipper, PacificParcelShipper } from '../shippers';
+import { IShipment } from './IShipment';
 
 const airEastShipper = new AirEastShipper();
 const chicagoSprintShipper = new ChicagoSprintShipper();
@@ -21,7 +22,7 @@ const getShipper = (code = 1) => shipperOptions?.[code - 1] || airEastShipper;
 
 const getFirstCharAsInt = (word: string) => (isNaN(Number(word?.[0])) ? undefined : Number(word?.[0]));
 
-export abstract class Shipment {
+export abstract class Shipment implements IShipment {
     shipmentID: number; // if 0 (zero) generate a new one
     toAddress: string; // has street, city, and state
     fromAddress: string; // has street, city, and state
